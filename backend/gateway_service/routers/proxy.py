@@ -49,7 +49,6 @@ def get_service_url(service_name: str) -> str:
     raise HTTPException(status_code=503, detail=f"Service {service_name} unavailable")
 
 
-# Auth Routes (Pass-through)
 # 认证路由转发
 @router.post("/auth/register")
 async def proxy_register(request: Request):

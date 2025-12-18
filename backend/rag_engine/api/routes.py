@@ -126,7 +126,19 @@ async def chat(request: ChatRequest):
     except Exception as e:
         logger.error(f"LLM call failed: {e}")
 
+        # Fallback for Arrearage (Overdue Payment) or other API errors during LLM call
+        # 针对大模型欠费或其他调用错误的降级处理
+        if "Arrearage" in str(e) or "Access denied" in str(e) or "400" in str(e):
+             mock_answer = "【系统提示】由于底层大模型服务（阿里云 DashScope）账户欠费或访问被拒绝，无法生成智能回答。\n\n这是一条自动生成的测试响应，用于验证系统链路畅通。请联系管理员检查 API 额度。"
+             
+             # Still record history for testing flow
+             history.append({"role": "user", "content": request.query})
+             history.append({"role": "assistant", "content": mock_answer})
+             await redis_client.set(history_key, json.dumps(history), ex=3600)
+             
+             return ChatResponse(answer=mock_answer, sources=sources)
+
         cost_client.refund(
             request.user_id, estimated_tokens, settings.LLM_MODEL, transaction_id
         )
-        raise HTTPException(status_code=500, detail="LLM generation failed")
+        raise HTTPException(status_code=500, detail=f"LLM generation failed: {str(e)}")

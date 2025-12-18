@@ -1,4 +1,4 @@
-# LLM Micro-Architecture
+# LLM-Micro-Architecture
 
 <div align="center">
 
@@ -98,6 +98,7 @@ LLM-Knowledge-Assistant/
 | **Vector Service** | 50051 | gRPC + ChromaDB | 向量计算与检索服务，封装 ChromaDB 操作 |
 | **Cost Service** | 50053 | gRPC + MySQL | 成本控制中心，Token 计费，钱包扣款与回滚 |
 | **Frontend** | 5173 | Vue 3 + Vite + TS | 用户交互界面，聊天窗口，知识库管理 |
+
 ## 🛠️ 技术栈 (Tech Stack)
 | 领域分类 | 核心组件 / 技术 | 详细说明与用途 |
 | --- | --- | --- |
@@ -114,7 +115,7 @@ LLM-Knowledge-Assistant/
 |  | Nacos | 服务注册与发现、动态配置管理 (Config Management) |
 |  | RabbitMQ | 异步消息队列，用于知识库文档处理的削峰填谷 |
 | 🧠 AI 引擎 | Qwen-Plus | 接入阿里云通义千问 (API)，提供核心推理与生成能力 |
-|  | LangChain | RAG 框架基础，负责文档加载 (Loaders)、切片 (Splitters) 与 Prompt 管理 |
+|  | Openai Python SDK + Saga 模式 + Pypdf | RAG 框架基础，负责文档加载 (Loaders)、切片 (Splitters) 与 Prompt 管理 |
 |  | text-embedding-v2 | 高维文本向量化模型，用于计算文本相似度 |
 | 💾 数据存储 | MySQL 8.0 | 存储核心结构化数据：用户、钱包余额、订单流水 |
 |  | Redis | 高速缓存：网关限流 (Rate Limit)、分布式锁、Session 存储 |
