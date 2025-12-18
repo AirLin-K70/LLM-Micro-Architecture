@@ -1,0 +1,98 @@
+:root {
+  font-family: 'Inter', system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  
+  /* Modern Color Palette (Dark Mode First) */
+  --bg-color: #1a1b1e;
+  --sidebar-bg: #25262b;
+  --card-bg: #2c2e33;
+  --text-primary: #e6e8eb;
+  --text-secondary: #a1a1aa;
+  --accent-color: #6366f1; /* Indigo */
+  --accent-hover: #4f46e5;
+  --success-color: #10b981;
+  --danger-color: #ef4444;
+  --border-color: #373a40;
+
+  /* Element Plus Theme Overrides */
+  --el-color-primary: var(--accent-color);
+  --el-color-primary-light-3: #818cf8; /* Light Indigo */
+  --el-color-primary-dark-2: #4338ca; /* Dark Indigo */
+  --el-bg-color: var(--bg-color);
+  --el-bg-color-overlay: var(--card-bg);
+  --el-text-color-primary: var(--text-primary);
+  --el-text-color-regular: var(--text-secondary);
+  --el-border-color: var(--border-color);
+  --el-fill-color-blank: var(--card-bg); /* Input background */
+
+  color: var(--text-primary);
+  background-color: var(--bg-color);
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  display: flex;
+  place-items: center;
+  min-width: 320px;
+  min-height: 100vh;
+  background-color: var(--bg-color);
+  color: var(--text-primary);
+}
+
+#app {
+  width: 100%;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  text-align: left;
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-color); 
+}
+ 
+::-webkit-scrollbar-thumb {
+  background: #555; 
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #777; 
+}
+
+/* Global Transition */
+* {
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+}
+
+p {
+  color: var(--text-secondary);
+}
+
+a {
+  font-weight: 500;
+  color: var(--accent-color);
+  text-decoration: inherit;
+}
+a:hover {
+  color: var(--accent-hover);
+}

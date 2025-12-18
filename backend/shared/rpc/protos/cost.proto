@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+package cost;
+
+service CostService {
+  rpc CheckBalance (CheckBalanceRequest) returns (CheckBalanceResponse);
+  rpc Deduct (DeductRequest) returns (DeductResponse);
+  rpc Refund (DeductRequest) returns (DeductResponse);
+}
+
+message CheckBalanceRequest {
+  string user_id = 1;
+}
+
+message CheckBalanceResponse {
+  bool has_sufficient_funds = 1;
+  float current_balance = 2;
+}
+
+message DeductRequest {
+  string user_id = 1;
+  int32 token_count = 2;
+  string model_name = 3;
+  string transaction_id = 4; // For idempotency/Saga
+}
+
+message DeductResponse {
+  bool success = 1;
+  float remaining_balance = 2;
+  string message = 3;
+}

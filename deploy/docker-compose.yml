@@ -1,0 +1,120 @@
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: llm-mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - llm-net
+
+  redis:
+    image: redis:latest
+    container_name: llm-redis
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - llm-net
+
+  nacos:
+    image: nacos/nacos-server:v2.3.2
+    container_name: llm-nacos
+    platform: linux/amd64
+    restart: always
+    environment:
+      - MODE=standalone
+      - NACOS_AUTH_ENABLE=false
+      - NACOS_AUTH_TOKEN=U2VjcmV0S2V5MDEyMzQ1Njc4OTAxMjM0NTY3ODkwMTIzNDU2Nzg5MDEyMzQ1Njc4OTAxMjM0NTY3ODkwMTIzNDU2Nzg5
+      - NACOS_AUTH_IDENTITY_KEY=nacos
+      - NACOS_AUTH_IDENTITY_VALUE=nacos
+    ports:
+      - "8848:8848"
+      - "9848:9848"
+    volumes:
+      - nacos_data:/home/nacos/data
+    networks:
+      - llm-net
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: llm-rabbitmq
+    restart: always
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_DEFAULT_USER}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_DEFAULT_PASS}
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    networks:
+      - llm-net
+
+  jaeger:
+    image: jaegertracing/all-in-one:latest
+    container_name: llm-jaeger
+    restart: always
+    ports:
+      - "16686:16686" # Web UI
+      - "4317:4317"   # OTLP gRPC
+      - "4318:4318"   # OTLP HTTP
+      - "6831:6831/udp" # Jaeger Thrift Compact
+    environment:
+      - COLLECTOR_OTLP_ENABLED=true
+    networks:
+      - llm-net
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: llm-prometheus
+    restart: always
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
+    networks:
+      - llm-net
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: llm-grafana
+    restart: always
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./grafana/provisioning:/etc/grafana/provisioning
+      - ./grafana/dashboards:/etc/grafana/dashboards
+    networks:
+      - llm-net
+
+  chromadb:
+    image: chromadb/chroma:latest
+    container_name: llm-chromadb
+    restart: always
+    ports:
+      - "8000:8000"
+    volumes:
+      - chromadb_data:/chroma/chroma
+    networks:
+      - llm-net
+
+networks:
+  llm-net:
+    driver: bridge
+
+volumes:
+  mysql_data:
+  redis_data:
+  nacos_data:
+  rabbitmq_data:
+  chromadb_data:
